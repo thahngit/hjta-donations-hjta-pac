@@ -29,8 +29,10 @@ class AuthorizeNetResponse
     public $response_subcode;
     public $response_reason_code;
     public $response_reason_text;
+    public $error_message;
     public $authorization_code;
     public $avs_response;
+    public $avs_code;
     public $transaction_id;
     public $invoice_number;
     public $description;
@@ -66,10 +68,40 @@ class AuthorizeNetResponse
     public $card_code_response;
     public $cavv_response; // cardholder_authentication_verification_response
     public $account_number;
+    public $card_num;
     public $card_type;
     public $split_tender_id;
     public $requested_amount;
+    public $approved_amount;
     public $balance_on_card;
+    public $card_balance;
+    public $version;
+    public $user_ref;
+    public $test_mode;
+    public $ref_trans_id;
+    public $xml;
     public $response; // The response string from AuthorizeNet.
+
+    private $_custom_fields = array();
+
+    public function __get($name)
+    {
+        return isset($this->_custom_fields[$name]) ? $this->_custom_fields[$name] : null;
+    }
+
+    public function __set($name, $value)
+    {
+        $this->_custom_fields[$name] = $value;
+    }
+
+    public function __isset($name)
+    {
+        return isset($this->_custom_fields[$name]);
+    }
+
+    public function __unset($name)
+    {
+        unset($this->_custom_fields[$name]);
+    }
 
 }

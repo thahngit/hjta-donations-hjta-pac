@@ -18,6 +18,8 @@ class AuthorizeNetSIM extends AuthorizeNetResponse
     // For ARB transactions
     public $subscription_id;
     public $subscription_paynum;
+    public $api_login_id;
+    public $md5_setting;
 
     /**
      * Constructor.
@@ -102,6 +104,7 @@ class AuthorizeNetSIM_Form
     public $x_customer_ip;
     public $x_description;
     public $x_delim_data;
+    public $x_delim_char;
     public $x_duplicate_window;
     public $x_duty;
     public $x_email;
@@ -150,6 +153,28 @@ class AuthorizeNetSIM_Form
     public $x_type;
     public $x_version;
     public $x_zip;
+
+    private $_custom_fields = array();
+
+    public function __get($name)
+    {
+        return isset($this->_custom_fields[$name]) ? $this->_custom_fields[$name] : null;
+    }
+
+    public function __set($name, $value)
+    {
+        $this->_custom_fields[$name] = $value;
+    }
+
+    public function __isset($name)
+    {
+        return isset($this->_custom_fields[$name]);
+    }
+
+    public function __unset($name)
+    {
+        unset($this->_custom_fields[$name]);
+    }
     
     /**
      * Constructor
@@ -178,7 +203,8 @@ class AuthorizeNetSIM_Form
      */
     public function getHiddenFieldString()
     {
-        $array = (array)$this;
+        $array = array_merge(get_object_vars($this), $this->_custom_fields);
+        unset($array['_custom_fields']);
         $string = "";
         foreach ($array as $key => $value) {
             if ($value) {
